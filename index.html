@@ -82,8 +82,8 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="text-[11px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-md">SMP DAFI Kelas IX</span>
-                        <span id="connectionBadge" class="text-[11px] font-medium px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-100 border border-amber-300/30 hidden sm:inline-flex items-center gap-1">
-                            <i class="fa-solid fa-link-slash text-[10px]"></i> Mode Offline / Belum Dikonfigurasi
+                        <span id="connectionBadge" class="text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-100 border border-emerald-300/30 hidden sm:inline-flex items-center gap-1.5">
+                            <i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> Terhubung ke Google Sheets
                         </span>
                     </div>
                     <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-tight mt-0.5">
@@ -99,12 +99,6 @@
                     <span id="headerStudentName">-</span>
                     <span class="bg-white text-dafi-red font-bold px-1.5 py-0.5 rounded text-[11px]" id="headerStudentClass">-</span>
                 </div>
-
-                <!-- Teacher Settings Button -->
-                <button id="btnOpenConfig" type="button" onclick="openConfigModal()" title="Pengaturan URL Google Sheets (Guru)" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/25 text-white transition flex items-center gap-1.5 text-xs font-semibold border border-white/15">
-                    <i class="fa-solid fa-gear text-sm"></i>
-                    <span class="hidden sm:inline">Konfigurasi Sheets</span>
-                </button>
             </div>
         </div>
     </header>
@@ -163,20 +157,6 @@
                                 <span>Setelah dikumpulkan, jawaban terkunci dan langsung tersimpan ke Google Sheets Guru.</span>
                             </li>
                         </ul>
-                    </div>
-
-                    <!-- Alert Jika Google Sheets Belum Diisi -->
-                    <div id="unconfiguredWarning" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-4 text-amber-900 text-xs sm:text-sm flex items-start justify-between gap-3">
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base mt-0.5 shrink-0"></i>
-                            <div>
-                                <p class="font-bold">Perhatian untuk Guru: URL Google Apps Script Belum Dipasang</p>
-                                <p class="mt-0.5 text-amber-800">Kuis tetap dapat diuji coba, namun untuk mengirim nilai langsung ke Google Sheets, silakan klik tombol <strong>Konfigurasi Sheets</strong> di kanan atas atau masukkan URL pada variabel <code>DEFAULT_SCRIPT_URL</code>.</p>
-                            </div>
-                        </div>
-                        <button type="button" onclick="openConfigModal()" class="shrink-0 bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs transition">
-                            Atur URL
-                        </button>
                     </div>
 
                     <!-- Form Identitas Siswa -->
@@ -499,86 +479,6 @@
         </div>
     </div>
 
-    <!-- MODAL 2: KONFIGURASI GOOGLE SHEETS WEB APP URL (UNTUK GURU) -->
-    <div id="modalConfig" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-200">
-            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-dafi-lightred text-dafi-red flex items-center justify-center font-bold">
-                        <i class="fa-solid fa-table"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-extrabold text-gray-900 text-base">Konfigurasi Integrasi Google Sheets</h3>
-                        <p class="text-xs text-gray-500">Pengaturan URL Deployment Google Apps Script Guru</p>
-                    </div>
-                </div>
-                <button type="button" onclick="closeConfigModal()" class="text-gray-400 hover:text-gray-600 p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div class="mt-4 space-y-4 text-xs sm:text-sm">
-                <div class="bg-blue-50 border border-blue-200 text-blue-900 rounded-xl p-3.5 leading-relaxed text-xs">
-                    <p class="font-bold mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Cara Menghubungkan ke Google Sheets:</p>
-                    <ol class="list-decimal list-inside space-y-1 text-blue-800">
-                        <li>Salin kode dari file <code>Code.gs</code> ke menu <strong>Extensions &rarr; Apps Script</strong> di Google Sheets Anda.</li>
-                        <li>Klik <strong>Deploy &rarr; New deployment &rarr; Web app</strong> (Who has access: <em>Anyone</em>).</li>
-                        <li>Salin <strong>Web App URL</strong> (berakhiran <code>/exec</code>) lalu tempelkan di bawah ini.</li>
-                    </ol>
-                </div>
-
-                <div>
-                    <label for="inputScriptUrl" class="block font-bold text-gray-700 mb-1">
-                        URL Web App Google Apps Script (<code>.../exec</code>)
-                    </label>
-                    <input
-                        type="url"
-                        id="inputScriptUrl"
-                        placeholder="https://script.google.com/macros/s/AKfycb.../exec"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-dafi-red focus:ring-2 focus:ring-dafi-red/20 outline-none text-xs sm:text-sm font-mono"
-                    >
-                    <p id="configUrlHelper" class="text-[11px] text-gray-500 mt-1">
-                        Catatan: Untuk penggunaan permanen di semua perangkat siswa, Guru juga dapat menempelkan URL ini langsung pada konstanta <code>DEFAULT_SCRIPT_URL</code> di dalam file <code>index.html</code>.
-                    </p>
-                </div>
-
-                <div id="configSavedNotice" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-                    <i class="fa-solid fa-circle-check mr-1"></i> Konfigurasi URL berhasil disimpan!
-                </div>
-            </div>
-
-            <div class="mt-6 flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
-                <button
-                    type="button"
-                    onclick="sendSampleTestToSheets()"
-                    id="btnTestConnection"
-                    class="px-3.5 py-2 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer"
-                >
-                    <i class="fa-solid fa-vial text-dafi-red"></i>
-                    <span>Kirim Data Uji Coba</span>
-                </button>
-
-                <div class="flex items-center gap-2">
-                    <button
-                        type="button"
-                        onclick="closeConfigModal()"
-                        class="px-4 py-2 rounded-xl border border-gray-300 bg-white hover:bg-gray-100 text-gray-700 font-bold text-xs transition cursor-pointer"
-                    >
-                        Tutup
-                    </button>
-                    <button
-                        type="button"
-                        onclick="saveScriptUrlConfig()"
-                        class="px-4 py-2 rounded-xl dafi-gradient text-white font-bold text-xs shadow-sm transition cursor-pointer"
-                    >
-                        Simpan URL
-                    </button>
-                </div>
-            </div>
-            <div id="testConnectionResult" class="hidden mt-3 p-3 rounded-xl text-xs font-medium"></div>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 mt-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-2">
@@ -594,13 +494,10 @@
     <script>
         /**
          * ============================================================================
-         * KONFIGURASI UTAMA INTEGRASI GOOGLE SHEETS (UNTUK GURU)
+         * KONFIGURASI UTAMA INTEGRASI GOOGLE SHEETS
          * ============================================================================
-         * Tempelkan URL Web App Google Apps Script Anda di antara tanda kutip di bawah ini
-         * setelah Anda melakukan Deployment di Google Apps Script.
-         * Contoh: const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
          */
-        const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAlxULW5waB0Y4Kxj6dxf1hoto7hztqmWrdDfWvZ1Qp7VBQN2b5qW49L_XsLC6WQ0_/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAlxULW5waB0Y4Kxj6dxf1hoto7hztqmWrdDfWvZ1Qp7VBQN2b5qW49L_XsLC6WQ0_/exec";
 
         /**
          * Daftar 25 Soal Resmi PAI Kelas IX SMP DAFI (Ketentuan Penyembelihan, Kurban, & Akikah)
@@ -877,25 +774,6 @@
             evaluationResult: null
         };
 
-        // Fungsi pembantu untuk mendapatkan URL Google Apps Script aktif
-        function getActiveScriptUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const fromParam = urlParams.get('scriptUrl');
-            if (fromParam && fromParam.startsWith('https://script.google.com/')) {
-                return fromParam.trim();
-            }
-            if (DEFAULT_SCRIPT_URL && DEFAULT_SCRIPT_URL.trim() !== "") {
-                return DEFAULT_SCRIPT_URL.trim();
-            }
-            try {
-                const saved = localStorage.getItem('DAFI_PAI_SCRIPT_URL');
-                if (saved && saved.trim() !== "") return saved.trim();
-            } catch (e) {
-                // Abaikan jika storage diblokir
-            }
-            return "";
-        }
-
         // Membuat UUID unik untuk mencegah pengiriman ganda (idempotency key)
         function generateSubmissionId() {
             if (window.crypto && window.crypto.randomUUID) {
@@ -976,22 +854,6 @@
                 status,
                 details
             };
-        }
-
-        function updateConnectionBadgeUI() {
-            const url = getActiveScriptUrl();
-            const badge = document.getElementById('connectionBadge');
-            const warningBox = document.getElementById('unconfiguredWarning');
-
-            if (url) {
-                badge.className = "text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-100 border border-emerald-300/30 hidden sm:inline-flex items-center gap-1.5";
-                badge.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> Terhubung ke Google Sheets`;
-                warningBox.classList.add('hidden');
-            } else {
-                badge.className = "text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-amber-400/20 text-amber-100 border border-amber-300/30 hidden sm:inline-flex items-center gap-1.5";
-                badge.innerHTML = `<i class="fa-solid fa-gear text-[10px]"></i> URL Sheets Belum Diatur`;
-                warningBox.classList.remove('hidden');
-            }
         }
 
         function clearValidationErrors() {
@@ -1289,32 +1151,7 @@
             // Cegah klik/pengiriman ganda ketika pengiriman sedang berlangsung atau sudah berhasil
             if (quizState.isSending || quizState.syncSuccess) return;
 
-            const scriptUrl = getActiveScriptUrl();
             const banner = document.getElementById('syncStatusBanner');
-
-            if (!scriptUrl) {
-                banner.className = "rounded-2xl p-4 sm:p-5 border bg-amber-50 border-amber-300 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4";
-                banner.innerHTML = `
-                    <div class="flex items-start gap-3">
-                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl mt-0.5"></i>
-                        <div>
-                            <h4 class="font-extrabold text-sm sm:text-base">URL Google Sheets Belum Dikonfigurasi</h4>
-                            <p class="text-xs sm:text-sm text-amber-800 mt-0.5">
-                                Nilai Anda telah dihitung dengan akurat, namun belum terkirim ke Google Sheets karena URL Web App Guru belum dimasukkan. Pasang URL di menu <strong>Konfigurasi Sheets</strong> lalu klik tombol kirim ulang di samping.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <button type="button" onclick="openConfigModal()" class="px-3.5 py-2 rounded-xl bg-white border border-amber-400 text-amber-900 font-bold text-xs hover:bg-amber-100 transition cursor-pointer">
-                            Atur URL
-                        </button>
-                        <button type="button" onclick="submitQuizToGoogleSheets()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs transition flex items-center gap-1.5 cursor-pointer">
-                            <i class="fa-solid fa-rotate-right"></i> Kirim Ulang
-                        </button>
-                    </div>
-                `;
-                return;
-            }
 
             quizState.isSending = true;
             banner.className = "rounded-2xl p-4 sm:p-5 border bg-blue-50 border-blue-200 text-blue-900 flex items-center justify-between gap-4";
@@ -1332,7 +1169,7 @@
 
             try {
                 // Menggunakan Content-Type text/plain;charset=utf-8 agar tidak memicu blokir CORS preflight pada Google Apps Script
-                const response = await fetch(scriptUrl, {
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain;charset=utf-8'
@@ -1551,112 +1388,6 @@
                 container.appendChild(card);
             });
         }
-
-        function openConfigModal() {
-            const modal = document.getElementById('modalConfig');
-            const input = document.getElementById('inputScriptUrl');
-            input.value = getActiveScriptUrl();
-            document.getElementById('configSavedNotice').classList.add('hidden');
-            document.getElementById('testConnectionResult').classList.add('hidden');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeConfigModal() {
-            const modal = document.getElementById('modalConfig');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function saveScriptUrlConfig() {
-            const input = document.getElementById('inputScriptUrl');
-            const url = input.value.trim();
-            try {
-                if (url) {
-                    localStorage.setItem('DAFI_PAI_SCRIPT_URL', url);
-                } else {
-                    localStorage.removeItem('DAFI_PAI_SCRIPT_URL');
-                }
-            } catch (e) {
-                // Ignore storage errors
-            }
-            updateConnectionBadgeUI();
-            const notice = document.getElementById('configSavedNotice');
-            notice.classList.remove('hidden');
-
-            // Jika sedang berada di halaman hasil dan sebelumnya belum terkirim, otomatis coba kirim
-            if (quizState.isSubmitted && !quizState.syncSuccess && url) {
-                submitQuizToGoogleSheets();
-            }
-        }
-
-        async function sendSampleTestToSheets() {
-            const input = document.getElementById('inputScriptUrl');
-            const url = input.value.trim();
-            const resultBox = document.getElementById('testConnectionResult');
-            const btnTest = document.getElementById('btnTestConnection');
-
-            if (!url || !url.startsWith('https://script.google.com/')) {
-                resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-red-50 border border-red-200 text-dafi-red";
-                resultBox.textContent = "Masukkan URL Web App Google Apps Script yang valid (diawali https://script.google.com/.../exec) terlebih dahulu.";
-                resultBox.classList.remove('hidden');
-                return;
-            }
-
-            // Simpan terlebih dahulu
-            saveScriptUrlConfig();
-
-            btnTest.disabled = true;
-            btnTest.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Mengirim Uji Coba...`;
-            resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-800";
-            resultBox.textContent = "Sedang mengirim 1 baris data santri contoh ke Google Sheets...";
-            resultBox.classList.remove('hidden');
-
-            // Buat data uji coba dengan jawaban contoh (23 benar, 2 salah -> Nilai 92 TUNTAS)
-            const sampleAnswers = {
-                q1: "B", q2: "C", q3: "A", q4: "D", q5: "B",
-                q6: "C", q7: "A", q8: "D", q9: "B", q10: "C",
-                q11: "A", q12: "D", q13: "B", q14: "C", q15: "A",
-                q16: "D", q17: "B", q18: "C", q19: "A", q20: "D",
-                q21: "B", q22: "C", q23: "A", q24: "A", q25: "A"
-            };
-
-            const testPayload = {
-                submissionId: "TEST-" + Date.now(),
-                studentName: "SANTRI CONTOH (UJI COBA GURU)",
-                studentClass: "9A",
-                totalQuestions: 25,
-                answers: sampleAnswers
-            };
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(testPayload),
-                    redirect: 'follow'
-                });
-
-                const resJson = await response.json();
-                if (resJson && resJson.status === 'success') {
-                    resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-emerald-50 border border-emerald-300 text-emerald-900";
-                    resultBox.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> <strong>Berhasil!</strong> Data contoh (Nilai: ${resJson.data.score}, Status: ${resJson.data.status}) telah masuk ke sheet <strong>Hasil Kuis</strong> baris ke-${resJson.data.rowNumber}. Silakan periksa Google Sheets Anda!`;
-                } else {
-                    throw new Error(resJson?.message || "Gagal memproses di server.");
-                }
-            } catch (err) {
-                resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-red-50 border border-red-200 text-dafi-red";
-                resultBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> <strong>Gagal Terhubung:</strong> ${err.message}. Pastikan Deployment diatur ke <em>Who has access: Anyone</em>.`;
-            } finally {
-                btnTest.disabled = false;
-                btnTest.innerHTML = `<i class="fa-solid fa-vial text-dafi-red"></i> <span>Kirim Data Uji Coba</span>`;
-            }
-        }
-
-        // Inisialisasi saat halaman dimuat
-        window.onload = function () {
-            updateConnectionBadgeUI();
-        };
     </script>
 </body>
 </html>
