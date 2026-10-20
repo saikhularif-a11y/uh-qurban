@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAFI FIQH QUIZ — Misi Kurban & Akikah</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        dafi: {
+                            red: '#C8102E',
+                            darkred: '#9B0B22',
+                            lightred: '#FDE8EC',
+                            gray: '#F4F5F7',
+                            darkgray: '#374151'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F5F7;
+            color: #1F2937;
+        }
+        .dafi-gradient {
+            background: linear-gradient(135deg, #C8102E 0%, #8A081E 100%);
+        }
+        .option-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-card:hover:not(.disabled) {
+            transform: translateY(-2px);
+            border-color: #C8102E;
+            background-color: #FFF5F6;
+        }
+        .option-card.selected {
+            border-color: #C8102E;
+            background-color: #FDE8EC;
+            box-shadow: 0 4px 12px rgba(200, 16, 46, 0.12);
+        }
+        .nav-dot {
+            transition: all 0.15s ease;
+        }
+        .nav-dot:hover {
+            transform: scale(1.08);
+        }
+        @keyframes pulseSubtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.65; }
+        }
+        .animate-pulse-subtle {
+            animation: pulseSubtle 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-dafi-red selection:text-white">
+
+    <header class="dafi-gradient text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white text-dafi-red flex items-center justify-center font-extrabold text-xl shadow-md shrink-0">
+                    <i class="fa-solid fa-mosque"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-md">SMP DAFI Kelas IX</span>
+                        <span id="connectionBadge" class="text-[11px] font-medium px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-100 border border-amber-300/30 hidden sm:inline-flex items-center gap-1">
+                            <i class="fa-solid fa-link-slash text-[10px]"></i> Mode Offline / Belum Dikonfigurasi
+                        </span>
+                    </div>
+                    <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-tight mt-0.5">
+                        DAFI FIQH QUIZ — Misi Kurban & Akikah
+                    </h1>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- Student Active Badge during quiz -->
+                <div id="activeStudentBadge" class="hidden md:flex items-center gap-2 bg-white/15 backdrop-blur-sm px-3 py-1.5 rounded-xl text-xs font-medium border border-white/20">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span id="headerStudentName">-</span>
+                    <span class="bg-white text-dafi-red font-bold px-1.5 py-0.5 rounded text-[11px]" id="headerStudentClass">-</span>
+                </div>
+
+                <!-- Teacher Settings Button -->
+                <button id="btnOpenConfig" type="button" onclick="openConfigModal()" title="Pengaturan URL Google Sheets (Guru)" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/25 text-white transition flex items-center gap-1.5 text-xs font-semibold border border-white/15">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                    <span class="hidden sm:inline">Konfigurasi Sheets</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+        <!-- VIEW 1: HALAMAN AWAL (IDENTITAS & PETUNJUK) -->
+        <section id="viewStart" class="max-w-3xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
+                <!-- Hero Banner -->
+                <div class="dafi-gradient p-6 sm:p-8 text-white relative overflow-hidden">
+                    <div class="relative z-10">
+                        <span class="inline-flex items-center gap-1.5 bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
+                            <i class="fa-solid fa-book-quran"></i> Pendidikan Agama Islam & Budi Pekerti
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                            Evaluasi Ketentuan Penyembelihan Hewan, Kurban, & Akikah
+                        </h2>
+                        <p class="mt-2 text-white/90 text-sm sm:text-base leading-relaxed">
+                            Selamat datang, Santri SMP DAFI! Kerjakan kuis ini dengan jujur, teliti, dan penuh tanggung jawab sebagai wujud pengamalan nilai amanah.
+                        </p>
+                    </div>
+                    <i class="fa-solid fa-kaaba text-white/10 text-9xl absolute -right-4 -bottom-6 pointer-events-none"></i>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Petunjuk Pengerjaan -->
+                    <div class="bg-gray-50 rounded-xl p-4 sm:p-5 border border-gray-200">
+                        <h3 class="font-bold text-gray-800 flex items-center gap-2 text-sm sm:text-base mb-3">
+                            <i class="fa-solid fa-circle-info text-dafi-red"></i>
+                            Petunjuk & Aturan Pengerjaan Kuis
+                        </h3>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm text-gray-600">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-dafi-red mt-1 shrink-0"></i>
+                                <span>Jumlah soal: <strong>25 Pilihan Ganda</strong> (A, B, C, D).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-dafi-red mt-1 shrink-0"></i>
+                                <span>Setiap jawaban benar bernilai <strong>4 poin</strong> (Maksimal 100).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-dafi-red mt-1 shrink-0"></i>
+                                <span>Standar Ketuntasan Minimal (KKM): <strong>Nilai ≥ 80 (TUNTAS)</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-dafi-red mt-1 shrink-0"></i>
+                                <span>Urutan soal <strong>diacak otomatis</strong> untuk setiap sesi santri.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-dafi-red mt-1 shrink-0"></i>
+                                <span><strong>Semua 25 soal wajib dijawab</strong> sebelum dapat dikumpulkan.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-dafi-red mt-1 shrink-0"></i>
+                                <span>Setelah dikumpulkan, jawaban terkunci dan langsung tersimpan ke Google Sheets Guru.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Alert Jika Google Sheets Belum Diisi -->
+                    <div id="unconfiguredWarning" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-4 text-amber-900 text-xs sm:text-sm flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base mt-0.5 shrink-0"></i>
+                            <div>
+                                <p class="font-bold">Perhatian untuk Guru: URL Google Apps Script Belum Dipasang</p>
+                                <p class="mt-0.5 text-amber-800">Kuis tetap dapat diuji coba, namun untuk mengirim nilai langsung ke Google Sheets, silakan klik tombol <strong>Konfigurasi Sheets</strong> di kanan atas atau masukkan URL pada variabel <code>DEFAULT_SCRIPT_URL</code>.</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="openConfigModal()" class="shrink-0 bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs transition">
+                            Atur URL
+                        </button>
+                    </div>
+
+                    <!-- Form Identitas Siswa -->
+                    <form id="startForm" onsubmit="handleStartQuiz(event)" class="space-y-5" novalidate>
+                        <div>
+                            <label for="inputStudentName" class="block text-sm font-bold text-gray-700 mb-1.5">
+                                Nama Lengkap Santri <span class="text-dafi-red">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    id="inputStudentName"
+                                    placeholder="Contoh: Ahmad Fauzan Al-Farisi"
+                                    autocomplete="name"
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-dafi-red focus:ring-2 focus:ring-dafi-red/20 outline-none transition text-gray-800 font-medium text-sm sm:text-base"
+                                    required
+                                >
+                            </div>
+                            <p id="errStudentName" class="hidden text-xs text-dafi-red font-semibold mt-1.5 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-exclamation"></i> Nama lengkap santri wajib diisi (minimal 3 karakter).
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                Pilih Kelas <span class="text-dafi-red">*</span>
+                            </label>
+                            <div class="grid grid-cols-3 gap-3" id="classSelectionGroup">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="studentClass" value="9A" class="peer sr-only" onchange="clearValidationErrors()">
+                                    <div class="text-center py-3.5 px-4 rounded-xl border-2 border-gray-200 bg-white font-bold text-gray-700 peer-checked:border-dafi-red peer-checked:bg-dafi-lightred peer-checked:text-dafi-red hover:border-gray-300 transition flex flex-col items-center">
+                                        <span class="text-lg">9A</span>
+                                        <span class="text-[11px] font-medium text-gray-500 peer-checked:text-dafi-red">Kelas IX-A</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="studentClass" value="9B" class="peer sr-only" onchange="clearValidationErrors()">
+                                    <div class="text-center py-3.5 px-4 rounded-xl border-2 border-gray-200 bg-white font-bold text-gray-700 peer-checked:border-dafi-red peer-checked:bg-dafi-lightred peer-checked:text-dafi-red hover:border-gray-300 transition flex flex-col items-center">
+                                        <span class="text-lg">9B</span>
+                                        <span class="text-[11px] font-medium text-gray-500 peer-checked:text-dafi-red">Kelas IX-B</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="studentClass" value="9C" class="peer sr-only" onchange="clearValidationErrors()">
+                                    <div class="text-center py-3.5 px-4 rounded-xl border-2 border-gray-200 bg-white font-bold text-gray-700 peer-checked:border-dafi-red peer-checked:bg-dafi-lightred peer-checked:text-dafi-red hover:border-gray-300 transition flex flex-col items-center">
+                                        <span class="text-lg">9C</span>
+                                        <span class="text-[11px] font-medium text-gray-500 peer-checked:text-dafi-red">Kelas IX-C</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <p id="errStudentClass" class="hidden text-xs text-dafi-red font-semibold mt-1.5 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-exclamation"></i> Silakan pilih kelas terlebih dahulu (9A, 9B, atau 9C).
+                            </p>
+                        </div>
+
+                        <div class="pt-2">
+                            <button
+                                type="submit"
+                                class="w-full dafi-gradient hover:opacity-95 text-white font-extrabold py-4 px-6 rounded-xl shadow-lg shadow-dafi-red/25 transition transform active:scale-[0.99] flex items-center justify-center gap-2.5 text-base cursor-pointer"
+                            >
+                                <span>MULAI KUIS</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: HALAMAN PENGERJAAN KUIS -->
+        <section id="viewQuiz" class="hidden">
+            <!-- Top Mobile Student Info & Progress Bar -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <div class="flex items-center gap-2">
+                        <span id="quizProgressBadge" class="bg-dafi-red text-white text-xs font-extrabold px-3 py-1 rounded-lg">
+                            Soal 1 dari 25
+                        </span>
+                        <span id="answeredCountBadge" class="bg-gray-100 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-lg border border-gray-200">
+                            Terjawab: 0/25
+                        </span>
+                    </div>
+                    <div class="text-xs font-semibold text-gray-500 flex items-center gap-2">
+                        <span id="mobileStudentIdentity" class="md:hidden text-gray-700 font-bold"></span>
+                    </div>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="quizProgressBar" class="bg-dafi-red h-full transition-all duration-300 rounded-full" style="width: 4%"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Kolom Kiri: Kartu Soal Aktif -->
+                <div class="lg:col-span-8 bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden flex flex-col justify-between">
+                    <div class="p-5 sm:p-7">
+                        <!-- Header Nomor Soal -->
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-5">
+                            <div class="flex items-center gap-2.5">
+                                <span id="currentDisplayNumber" class="w-9 h-9 rounded-xl dafi-gradient text-white font-extrabold flex items-center justify-center text-sm shadow-sm">
+                                    1
+                                </span>
+                                <div>
+                                    <span class="text-xs uppercase tracking-wider font-bold text-gray-400 block">Pertanyaan Pilihan Ganda</span>
+                                    <span class="text-xs font-semibold text-gray-600">Bobot: 4 Poin</span>
+                                </div>
+                            </div>
+                            <span id="questionAnsweredStatus" class="text-xs font-bold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
+                                Belum Dijawab
+                            </span>
+                        </div>
+
+                        <!-- Redaksi Soal -->
+                        <div class="mb-6">
+                            <p id="questionText" class="text-base sm:text-lg font-bold text-gray-800 leading-relaxed select-none">
+                                Memuat pertanyaan...
+                            </p>
+                        </div>
+
+                        <!-- Pilihan Jawaban A, B, C, D -->
+                        <div id="optionsContainer" class="space-y-3">
+                            <!-- Di-render secara dinamis oleh JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Footer Navigasi Soal Sebelumnya / Selanjutnya -->
+                    <div class="bg-gray-50 px-5 sm:px-7 py-4 border-t border-gray-200 flex items-center justify-between gap-3">
+                        <button
+                            type="button"
+                            id="btnPrevQuestion"
+                            onclick="navigateQuestion(-1)"
+                            class="px-4 py-2.5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100 text-gray-700 font-bold text-sm transition flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+                        >
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                            <span>Sebelumnya</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            id="btnNextQuestion"
+                            onclick="navigateQuestion(1)"
+                            class="px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-900 text-white font-bold text-sm transition flex items-center gap-2 cursor-pointer"
+                        >
+                            <span>Selanjutnya</span>
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: Navigasi Nomor Soal & Tombol Kumpulkan -->
+                <div class="lg:col-span-4 bg-white rounded-2xl shadow-md border border-gray-200 p-5 sticky top-20">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-grip text-dafi-red"></i>
+                            Navigasi Nomor Soal
+                        </h3>
+                        <span id="unansweredCounterText" class="text-xs font-semibold text-dafi-red">25 belum dijawab</span>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center gap-4 text-[11px] text-gray-500 mb-3 pb-3 border-b border-gray-100">
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded bg-dafi-red inline-block"></span> Sudah Dijawab
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded bg-gray-100 border border-gray-300 inline-block"></span> Belum
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded ring-2 ring-gray-800 inline-block"></span> Aktif
+                        </span>
+                    </div>
+
+                    <!-- Grid 25 Nomor Soal -->
+                    <div id="questionGridNav" class="grid grid-cols-5 gap-2 mb-5">
+                        <!-- Di-render oleh JS -->
+                    </div>
+
+                    <!-- Pesan Peringatan Jika Belum Lengkap -->
+                    <div id="incompleteNotice" class="hidden mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-dafi-red text-xs font-semibold flex items-start gap-2">
+                        <i class="fa-solid fa-circle-exclamation mt-0.5 shrink-0"></i>
+                        <span id="incompleteNoticeText">Masih ada soal yang belum dijawab.</span>
+                    </div>
+
+                    <!-- Tombol Kumpulkan Kuis -->
+                    <button
+                        type="button"
+                        id="btnRequestSubmit"
+                        onclick="handleRequestSubmit()"
+                        class="w-full py-3.5 px-4 rounded-xl dafi-gradient hover:opacity-95 text-white font-extrabold text-sm shadow-md shadow-dafi-red/20 transition flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>KUMPULKAN JAWABAN</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: HALAMAN HASIL & PEMBAHASAN -->
+        <section id="viewResult" class="hidden space-y-6 max-w-4xl mx-auto">
+            <!-- Status Pengiriman ke Google Sheets -->
+            <div id="syncStatusBanner" class="rounded-2xl p-4 sm:p-5 border shadow-sm transition-all">
+                <!-- Diisi dinamis oleh JS: Mengirim / Berhasil / Gagal dengan tombol Retry -->
+            </div>
+
+            <!-- Kartu Ringkasan Hasil Akhir -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
+                <div class="dafi-gradient p-6 sm:p-8 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full">
+                            Hasil Evaluasi Akhir
+                        </span>
+                        <h2 id="resultStudentName" class="text-2xl sm:text-3xl font-extrabold mt-2">-</h2>
+                        <p class="text-white/90 text-sm flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
+                            <span><i class="fa-solid fa-users-rectangle mr-1"></i> Kelas: <strong id="resultStudentClass">-</strong></span>
+                            <span><i class="fa-regular fa-clock mr-1"></i> Waktu Kumpul: <strong id="resultTimestamp">-</strong></span>
+                        </p>
+                    </div>
+
+                    <!-- Badge Nilai Akhir Besar -->
+                    <div class="bg-white text-gray-900 rounded-2xl p-4 sm:px-6 text-center shadow-lg shrink-0 flex sm:flex-col items-center justify-between sm:justify-center gap-3">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-gray-400">Nilai Akhir</span>
+                        <div class="text-4xl sm:text-5xl font-black text-dafi-red leading-none" id="resultFinalScore">0</div>
+                        <span id="resultPassBadge" class="text-xs font-extrabold px-3 py-1 rounded-full">-</span>
+                    </div>
+                </div>
+
+                <!-- Grid Statistik Jawaban -->
+                <div class="p-6 grid grid-cols-2 sm:grid-cols-4 gap-4 bg-gray-50 border-b border-gray-200">
+                    <div class="bg-white p-4 rounded-xl border border-gray-200 text-center">
+                        <span class="text-xs font-semibold text-gray-500 block">Total Soal</span>
+                        <span class="text-xl font-extrabold text-gray-800 mt-1 block">25</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-emerald-200 text-center">
+                        <span class="text-xs font-semibold text-emerald-700 block">Jawaban Benar</span>
+                        <span id="resultCorrectCount" class="text-xl font-extrabold text-emerald-600 mt-1 block">0 / 25</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-red-200 text-center">
+                        <span class="text-xs font-semibold text-red-700 block">Jawaban Salah</span>
+                        <span id="resultWrongCount" class="text-xl font-extrabold text-dafi-red mt-1 block">0</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-200 text-center">
+                        <span class="text-xs font-semibold text-gray-500 block">Status Ketuntasan</span>
+                        <span id="resultStatusText" class="text-sm sm:text-base font-extrabold mt-1.5 block">-</span>
+                    </div>
+                </div>
+
+                <!-- Pesan Motivasi -->
+                <div class="p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3">
+                        <div id="resultFeedbackIcon" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg"></div>
+                        <div>
+                            <h4 id="resultFeedbackTitle" class="font-bold text-gray-800 text-sm sm:text-base"></h4>
+                            <p id="resultFeedbackDesc" class="text-xs sm:text-sm text-gray-600 mt-0.5"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian Pembahasan 25 Soal -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-5 sm:p-7">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-6 border-b border-gray-200">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-gray-800 flex items-center gap-2">
+                            <i class="fa-solid fa-clipboard-check text-dafi-red"></i>
+                            Pembahasan Lengkap Setiap Soal (1–25)
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            Pelajari kembali pembahasan di bawah ini untuk memahami ketentuan syariat penyembelihan, kurban, dan akikah.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="filterReview('ALL')" id="btnFilterAll" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-white transition">Semua (25)</button>
+                        <button type="button" onclick="filterReview('WRONG')" id="btnFilterWrong" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Hanya yang Salah</button>
+                    </div>
+                </div>
+
+                <div id="reviewContainer" class="space-y-4">
+                    <!-- Di-render oleh JS setelah kuis dikumpulkan -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL 1: KONFIRMASI PENGUMPULAN JAWABAN -->
+    <div id="modalConfirmSubmit" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-200 transform transition-all">
+            <div class="w-12 h-12 rounded-2xl bg-red-100 text-dafi-red flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-gray-900">Kumpulkan Jawaban Sekarang?</h3>
+            <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+                Pastikan seluruh <strong>25 soal</strong> telah diperiksa dengan teliti. Setelah dikumpulkan, jawaban <strong>tidak dapat diubah kembali</strong> pada sesi ini dan akan langsung dikirim ke Google Sheets Guru.
+            </p>
+            <div class="mt-4 p-3 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-700 space-y-1">
+                <div>Nama Santri: <strong id="confirmModalName">-</strong></div>
+                <div>Kelas: <strong id="confirmModalClass">-</strong></div>
+                <div>Status Soal: <strong class="text-emerald-600">25 dari 25 Terjawab Lengkap</strong></div>
+            </div>
+            <div class="mt-6 flex items-center justify-end gap-3">
+                <button
+                    type="button"
+                    onclick="closeConfirmModal()"
+                    class="px-4 py-2.5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100 text-gray-700 font-bold text-sm transition cursor-pointer"
+                >
+                    Periksa Lagi
+                </button>
+                <button
+                    type="button"
+                    id="btnConfirmFinalSubmit"
+                    onclick="executeFinalSubmit()"
+                    class="px-5 py-2.5 rounded-xl dafi-gradient hover:opacity-95 text-white font-extrabold text-sm shadow-md transition flex items-center gap-2 cursor-pointer"
+                >
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Ya, Kumpulkan!</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: KONFIGURASI GOOGLE SHEETS WEB APP URL (UNTUK GURU) -->
+    <div id="modalConfig" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-200">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-dafi-lightred text-dafi-red flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-table"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-gray-900 text-base">Konfigurasi Integrasi Google Sheets</h3>
+                        <p class="text-xs text-gray-500">Pengaturan URL Deployment Google Apps Script Guru</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeConfigModal()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="mt-4 space-y-4 text-xs sm:text-sm">
+                <div class="bg-blue-50 border border-blue-200 text-blue-900 rounded-xl p-3.5 leading-relaxed text-xs">
+                    <p class="font-bold mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Cara Menghubungkan ke Google Sheets:</p>
+                    <ol class="list-decimal list-inside space-y-1 text-blue-800">
+                        <li>Salin kode dari file <code>Code.gs</code> ke menu <strong>Extensions &rarr; Apps Script</strong> di Google Sheets Anda.</li>
+                        <li>Klik <strong>Deploy &rarr; New deployment &rarr; Web app</strong> (Who has access: <em>Anyone</em>).</li>
+                        <li>Salin <strong>Web App URL</strong> (berakhiran <code>/exec</code>) lalu tempelkan di bawah ini.</li>
+                    </ol>
+                </div>
+
+                <div>
+                    <label for="inputScriptUrl" class="block font-bold text-gray-700 mb-1">
+                        URL Web App Google Apps Script (<code>.../exec</code>)
+                    </label>
+                    <input
+                        type="url"
+                        id="inputScriptUrl"
+                        placeholder="https://script.google.com/macros/s/AKfycb.../exec"
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:border-dafi-red focus:ring-2 focus:ring-dafi-red/20 outline-none text-xs sm:text-sm font-mono"
+                    >
+                    <p id="configUrlHelper" class="text-[11px] text-gray-500 mt-1">
+                        Catatan: Untuk penggunaan permanen di semua perangkat siswa, Guru juga dapat menempelkan URL ini langsung pada konstanta <code>DEFAULT_SCRIPT_URL</code> di dalam file <code>index.html</code>.
+                    </p>
+                </div>
+
+                <div id="configSavedNotice" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+                    <i class="fa-solid fa-circle-check mr-1"></i> Konfigurasi URL berhasil disimpan!
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
+                <button
+                    type="button"
+                    onclick="sendSampleTestToSheets()"
+                    id="btnTestConnection"
+                    class="px-3.5 py-2 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer"
+                >
+                    <i class="fa-solid fa-vial text-dafi-red"></i>
+                    <span>Kirim Data Uji Coba</span>
+                </button>
+
+                <div class="flex items-center gap-2">
+                    <button
+                        type="button"
+                        onclick="closeConfigModal()"
+                        class="px-4 py-2 rounded-xl border border-gray-300 bg-white hover:bg-gray-100 text-gray-700 font-bold text-xs transition cursor-pointer"
+                    >
+                        Tutup
+                    </button>
+                    <button
+                        type="button"
+                        onclick="saveScriptUrlConfig()"
+                        class="px-4 py-2 rounded-xl dafi-gradient text-white font-bold text-xs shadow-sm transition cursor-pointer"
+                    >
+                        Simpan URL
+                    </button>
+                </div>
+            </div>
+            <div id="testConnectionResult" class="hidden mt-3 p-3 rounded-xl text-xs font-medium"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-4 mt-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-2">
+            <div>
+                <strong>DAFI FIQH QUIZ</strong> &mdash; Media Pembelajaran PAI Kelas IX SMP DAFI
+            </div>
+            <div>
+                Materi: Ketentuan Penyembelihan Hewan, Kurban, & Akikah
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * ============================================================================
+         * KONFIGURASI UTAMA INTEGRASI GOOGLE SHEETS (UNTUK GURU)
+         * ============================================================================
+         * Tempelkan URL Web App Google Apps Script Anda di antara tanda kutip di bawah ini
+         * setelah Anda melakukan Deployment di Google Apps Script.
+         * Contoh: const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+         */
+        const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAlxULW5waB0Y4Kxj6dxf1hoto7hztqmWrdDfWvZ1Qp7VBQN2b5qW49L_XsLC6WQ0_/exec";
+
+        /**
+         * Daftar 25 Soal Resmi PAI Kelas IX SMP DAFI (Ketentuan Penyembelihan, Kurban, & Akikah)
+         * Catatan Keamanan: Kunci jawaban TIDAK disimpan secara terbuka dan TIDAK ditampilkan
+         * di DOM sama sekali sebelum kuis dikumpulkan. Server Google Apps Script adalah
+         * otoritas utama yang menghitung dan memvalidasi ulang skor di Google Sheets.
+         */
+        const QUESTION_BANK = [
+            {
+                id: 1,
+                question: "Apa tujuan utama penyembelihan hewan secara syar'i?",
+                options: {
+                    A: "Agar harga daging menjadi mahal",
+                    B: "Agar hewan halal dikonsumsi sesuai ketentuan syariat",
+                    C: "Agar hewan dapat dijual kembali",
+                    D: "Agar tradisi masyarakat tetap berlangsung"
+                }
+            },
+            {
+                id: 2,
+                question: "Unsur pokok penyembelihan yang dipelajari dalam fikih meliputi ....",
+                options: {
+                    A: "Penjual, pembeli, pasar, dan harga",
+                    B: "Peternak, kandang, makanan, dan timbangan",
+                    C: "Penyembelih, hewan, alat, dan pelaksanaan penyembelihan",
+                    D: "Panitia, penerima, kemasan, dan kendaraan"
+                }
+            },
+            {
+                id: 3,
+                question: "Sikap yang sesuai dengan hadis tentang ihsan dalam penyembelihan adalah ....",
+                options: {
+                    A: "Memperlakukan hewan dengan baik dan menghindari penderitaan yang tidak perlu",
+                    B: "Membuat hewan ketakutan agar tidak bergerak",
+                    C: "Menggunakan alat tumpul supaya lebih aman",
+                    D: "Memperlihatkan proses penyembelihan kepada hewan lain"
+                }
+            },
+            {
+                id: 4,
+                question: "Berikut ini yang termasuk ketentuan alat penyembelihan adalah ....",
+                options: {
+                    A: "Harus terbuat dari kayu",
+                    B: "Harus berukuran paling besar",
+                    C: "Boleh menggunakan gigi atau kuku",
+                    D: "Tajam dan sesuai ketentuan syariat"
+                }
+            },
+            {
+                id: 5,
+                question: "Penggalan ayat yang berarti “Maka, laksanakanlah salat karena Tuhanmu dan berkurbanlah!” terdapat dalam ....",
+                options: {
+                    A: "QS. Al-Ikhlas ayat 1",
+                    B: "QS. Al-Kauṡar ayat 2",
+                    C: "QS. Al-Falaq ayat 1",
+                    D: "QS. Al-'Aṣr ayat 2"
+                }
+            },
+            {
+                id: 6,
+                question: "Ibadah kurban adalah penyembelihan hewan ternak tertentu sebagai bentuk ....",
+                options: {
+                    A: "Persaingan antarkeluarga",
+                    B: "Pamer kekayaan",
+                    C: "Ketaatan dan pendekatan diri kepada Allah Swt.",
+                    D: "Kewajiban memberi hadiah kepada teman"
+                }
+            },
+            {
+                id: 7,
+                question: "Menurut jumhur ulama, hukum kurban bagi muslim yang mampu adalah ....",
+                options: {
+                    A: "Sunah muakkadah",
+                    B: "Makruh",
+                    C: "Haram",
+                    D: "Wajib bagi semua orang tanpa pengecualian"
+                }
+            },
+            {
+                id: 8,
+                question: "Waktu pelaksanaan kurban adalah ....",
+                options: {
+                    A: "Tanggal 1–3 Syawal",
+                    B: "Sepanjang tahun tanpa batas",
+                    C: "Tanggal 1–7 Ramadan",
+                    D: "Tanggal 10–13 Zulhijah, setelah salat Iduladha untuk penyembelihan pada tanggal 10"
+                }
+            },
+            {
+                id: 9,
+                question: "Seekor sapi atau kerbau dapat digunakan untuk kurban bersama paling banyak ....",
+                options: {
+                    A: "Dua orang",
+                    B: "Tujuh orang",
+                    C: "Sembilan orang",
+                    D: "Sepuluh orang"
+                }
+            },
+            {
+                id: 10,
+                question: "Umur minimal sapi untuk kurban menurut ketentuan fikih yang umum diajarkan adalah ....",
+                options: {
+                    A: "Enam bulan",
+                    B: "Satu tahun",
+                    C: "Dua tahun dan memasuki tahun ketiga",
+                    D: "Lima tahun"
+                }
+            },
+            {
+                id: 11,
+                question: "Berikut ini yang termasuk cacat berat yang dapat menyebabkan hewan tidak memenuhi syarat kurban adalah ....",
+                options: {
+                    A: "Pincang yang nyata",
+                    B: "Warna bulu berbeda",
+                    C: "Tanduk tidak terlalu panjang",
+                    D: "Ukuran tubuh sedang"
+                }
+            },
+            {
+                id: 12,
+                question: "Seseorang menyembelih hewan pada tanggal 10 Zulhijah sebelum salat Iduladha. Bagaimana statusnya sebagai kurban Iduladha?",
+                options: {
+                    A: "Sah karena dilakukan pada tanggal 10 Zulhijah",
+                    B: "Sah jika dagingnya segera dibagikan",
+                    C: "Sah jika disaksikan panitia",
+                    D: "Belum memenuhi waktu penyembelihan kurban yang disyaratkan"
+                }
+            },
+            {
+                id: 13,
+                question: "Pesan utama QS. Al-Hajj ayat 37 tentang kurban adalah ....",
+                options: {
+                    A: "Banyaknya daging menjadi ukuran utama ibadah",
+                    B: "Ketakwaan dan keikhlasan merupakan hal yang sangat penting",
+                    C: "Kurban bertujuan menunjukkan kekayaan",
+                    D: "Daging kurban harus seluruhnya dimakan pemilik"
+                }
+            },
+            {
+                id: 14,
+                question: "Sikap yang tepat ketika hewan yang telah dipersiapkan untuk kurban ternyata sakit dan pincang adalah ....",
+                options: {
+                    A: "Tetap menyembelih tanpa pemeriksaan",
+                    B: "Menyembunyikan kondisi hewan dari panitia",
+                    C: "Meminta pemeriksaan pihak yang kompeten dan memastikan kelayakannya",
+                    D: "Langsung membagikan daging sebelum diperiksa"
+                }
+            },
+            {
+                id: 15,
+                question: "Pernyataan yang benar tentang pembagian daging kurban adalah ....",
+                options: {
+                    A: "Daging dapat diberikan kepada fakir miskin, kerabat, tetangga, dan pihak lain sesuai ketentuan fikih",
+                    B: "Seluruh daging wajib dijual",
+                    C: "Daging hanya boleh diberikan kepada panitia",
+                    D: "Daging wajib dibagikan dalam tiga bagian sama rata tanpa pengecualian"
+                }
+            },
+            {
+                id: 16,
+                question: "Bagaimana ketentuan pembayaran upah jagal dalam pelaksanaan kurban?",
+                options: {
+                    A: "Selalu wajib dibayar menggunakan daging kurban",
+                    B: "Jagal tidak boleh menerima upah dalam bentuk apa pun",
+                    C: "Upah harus diambil dari bagian fakir miskin",
+                    D: "Upah dibayarkan dari dana lain, bukan daging kurban sebagai upah"
+                }
+            },
+            {
+                id: 17,
+                question: "Akikah adalah ibadah penyembelihan hewan yang berkaitan dengan ....",
+                options: {
+                    A: "Awal tahun Hijriah",
+                    B: "Kelahiran seorang anak",
+                    C: "Pembangunan rumah",
+                    D: "Perjalanan jauh"
+                }
+            },
+            {
+                id: 18,
+                question: "Hukum akikah yang umum diajarkan dalam fikih adalah ....",
+                options: {
+                    A: "Wajib bagi semua orang dalam setiap keadaan",
+                    B: "Haram",
+                    C: "Sunah muakkadah",
+                    D: "Makruh"
+                }
+            },
+            {
+                id: 19,
+                question: "Jumlah hewan akikah yang dianjurkan untuk anak laki-laki adalah ....",
+                options: {
+                    A: "Dua ekor kambing atau domba",
+                    B: "Empat ekor kambing",
+                    C: "Tiga ekor sapi",
+                    D: "Satu ekor unta"
+                }
+            },
+            {
+                id: 20,
+                question: "Jumlah hewan akikah yang dianjurkan untuk anak perempuan adalah ....",
+                options: {
+                    A: "Dua ekor sapi",
+                    B: "Tiga ekor kambing",
+                    C: "Empat ekor domba",
+                    D: "Satu ekor kambing atau domba"
+                }
+            },
+            {
+                id: 21,
+                question: "Waktu utama pelaksanaan akikah adalah ....",
+                options: {
+                    A: "Hari pertama Ramadan",
+                    B: "Hari ketujuh setelah kelahiran",
+                    C: "Hari Raya Idulfitri",
+                    D: "Tanggal 10 Zulhijah saja"
+                }
+            },
+            {
+                id: 22,
+                question: "Keluarga belum mampu melaksanakan akikah pada hari ketujuh setelah kelahiran anaknya. Sikap yang tepat adalah ....",
+                options: {
+                    A: "Memaksakan diri berutang agar akikah terlaksana",
+                    B: "Menganggap anaknya tidak memperoleh keberkahan",
+                    C: "Tidak membebani keluarga dan memahami bahwa akikah merupakan sunah muakkadah",
+                    D: "Menganggap akikah harus dilakukan tepat hari ketujuh tanpa pengecualian"
+                }
+            },
+            {
+                id: 23,
+                question: "Perbedaan utama kurban dan akikah adalah ....",
+                options: {
+                    A: "Kurban berkaitan dengan Iduladha, sedangkan akikah berkaitan dengan kelahiran anak",
+                    B: "Kurban hanya boleh menggunakan ayam",
+                    C: "Akikah hanya dilakukan pada tanggal 10 Zulhijah",
+                    D: "Kurban dan akikah memiliki waktu pelaksanaan yang sama"
+                }
+            },
+            {
+                id: 24,
+                question: "Dalam tradisi masyarakat Indonesia, daging akikah lazimnya ....",
+                options: {
+                    A: "Disimpan tanpa boleh dibagikan",
+                    B: "Dijual seluruhnya untuk keuntungan pribadi",
+                    C: "Hanya dibagikan kepada panitia",
+                    D: "Dimasak terlebih dahulu, lalu dibagikan kepada keluarga, tetangga, dan masyarakat"
+                }
+            },
+            {
+                id: 25,
+                question: "Nilai karakter utama yang diajarkan melalui ibadah kurban dan akikah adalah ....",
+                options: {
+                    A: "Pamer, persaingan, dan mencari pujian",
+                    B: "Ketakwaan, keikhlasan, rasa syukur, amanah, dan kepedulian sosial",
+                    C: "Mengutamakan kepentingan pribadi",
+                    D: "Mengukur kemuliaan seseorang dari banyaknya harta"
+                }
+            }
+        ];
+
+        // State Sesi Kuis Siswa
+        let quizState = {
+            submissionId: "",
+            studentName: "",
+            studentClass: "",
+            shuffledQuestions: [],
+            currentIndex: 0,
+            // Menyimpan jawaban siswa berdasarkan ID soal asli (1 s.d. 25) -> "A" | "B" | "C" | "D"
+            answersByOriginalId: {},
+            isSubmitted: false,
+            isSending: false,
+            syncSuccess: false,
+            submittedAtText: "",
+            evaluationResult: null
+        };
+
+        // Fungsi pembantu untuk mendapatkan URL Google Apps Script aktif
+        function getActiveScriptUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromParam = urlParams.get('scriptUrl');
+            if (fromParam && fromParam.startsWith('https://script.google.com/')) {
+                return fromParam.trim();
+            }
+            if (DEFAULT_SCRIPT_URL && DEFAULT_SCRIPT_URL.trim() !== "") {
+                return DEFAULT_SCRIPT_URL.trim();
+            }
+            try {
+                const saved = localStorage.getItem('DAFI_PAI_SCRIPT_URL');
+                if (saved && saved.trim() !== "") return saved.trim();
+            } catch (e) {
+                // Abaikan jika storage diblokir
+            }
+            return "";
+        }
+
+        // Membuat UUID unik untuk mencegah pengiriman ganda (idempotency key)
+        function generateSubmissionId() {
+            if (window.crypto && window.crypto.randomUUID) {
+                return "DAFI-" + window.crypto.randomUUID();
+            }
+            return "DAFI-" + Date.now() + "-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+        }
+
+        // Algoritma pengacakan Fisher-Yates untuk mengacak urutan soal setiap sesi
+        function shuffleArray(array) {
+            const copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        /**
+         * Resolusi kunci & pembahasan yang hanya dipanggil SETELAH siswa mengunci dan mengumpulkan kuis.
+         * Data dikodekan agar tidak tampak secara kasat mata saat siswa mengerjakan kuis,
+         * dan divalidasi penuh oleh Google Apps Script di sisi server.
+         */
+        function evaluateSubmittedQuizLocally(answersMap) {
+            // Paket data terenkode Base64 berisi kunci dan pembahasan 25 soal (hanya didekode setelah kuis selesai)
+            const encodedKeyMap = [
+                [1, "Qg==", "Tujuan utama penyembelihan secara syar'i adalah agar hewan tersebut halal dan thayyib untuk dikonsumsi sesuai syariat Islam."],
+                [2, "Qw==", "Empat rukun/unsur pokok penyembelihan dalam fikih adalah: penyembelih (dzabih), hewan yang disembelih, alat penyembelihan, dan proses/pelaksanaan penyembelihan."],
+                [3, "QQ==", "Rasulullah saw. memerintahkan berbuat ihsan dalam segala hal, termasuk menyembelih hewan dengan cara yang baik, menajamkan pisau, dan tidak menyiksa hewan."],
+                [4, "RA==", "Alat penyembelihan wajib tajam (dapat melukai dan mengalirkan darah) serta tidak terbuat dari tulang, kuku, atau gigi."],
+                [5, "Qg==", "Bunyi perintah 'Faṣalli lirabbika wanḥar' (Maka laksanakanlah salat karena Tuhanmu dan berkurbanlah!) terdapat dalam QS. Al-Kauṡar ayat 2."],
+                [6, "Qw==", "Secara istilah, kurban (udhiyah) adalah penyembelihan hewan ternak pada waktu tertentu sebagai bentuk taqarrub (pendekatan diri) dan ketaatan kepada Allah Swt."],
+                [7, "QQ==", "Mayoritas ulama (jumhur) menetapkan bahwa hukum melaksanakan kurban bagi muslim yang mampu adalah sunah muakkadah (sunah yang sangat dianjurkan)."],
+                [8, "RA==", "Waktu penyembelihan kurban dimulai setelah pelaksanaan salat Iduladha pada 10 Zulhijah hingga terbenam matahari pada akhir hari Tasyrik (13 Zulhijah)."],
+                [9, "Qg==", "Berdasarkan hadis riwayat Muslim dari Jabir r.a., satu ekor sapi atau kerbau dapat digunakan untuk patungan kurban maksimal 7 orang."],
+                [10, "Qw==", "Syarat umur minimal sapi atau kerbau untuk kurban adalah telah genap berusia 2 tahun dan memasuki tahun ke-3."],
+                [11, "QQ==", "Empat cacat berat yang membuat hewan tidak sah untuk kurban menurut hadis Nabi saw. antara lain: buta sebelah yang jelas, sakit yang jelas, pincang yang nyata, dan terlalu kurus."],
+                [12, "RA==", "Menyembelih hewan pada 10 Zulhijah sebelum selesai salat Iduladha belum masuk waktu kurban, sehingga statusnya dianggap sedekah daging biasa."],
+                [13, "Qg==", "QS. Al-Hajj ayat 37 menegaskan bahwa daging dan darah hewan kurban tidak akan sampai kepada Allah, melainkan ketakwaan dan keikhlasan dari orang yang berkurban."],
+                [14, "Qw==", "Sikap amanah dan bertanggung jawab adalah meminta pemeriksaan dokter hewan atau pihak kompeten untuk memastikan apakah hewan tersebut masih memenuhi syarat sah kurban."],
+                [15, "QQ==", "Daging kurban disunahkan untuk dimakan sebagian oleh pekurban, dihadiahkan kepada kerabat/tetangga, dan disedekahkan kepada fakir miskin."],
+                [16, "RA==", "Dari Ali bin Abi Thalib r.a., Rasulullah saw. melarang memberikan daging atau kulit hewan kurban sebagai upah jagal; upah harus diambil dari dana pribadi pekurban."],
+                [17, "Qg==", "Akikah adalah sembelihan hewan ternak sebagai wujud rasa syukur kepada Allah Swt. atas kelahiran seorang bayi."],
+                [18, "Qw==", "Menurut jumhur ulama, hukum melaksanakan akikah bagi orang tua yang mampu adalah sunah muakkadah."],
+                [19, "QQ==", "Disunahkan bagi anak laki-laki untuk diakikahi dengan 2 ekor kambing atau domba yang setara."],
+                [20, "RA==", "Disunahkan bagi anak perempuan untuk diakikahi dengan 1 ekor kambing atau domba."],
+                [21, "Qg==", "Berdasarkan hadis Samurah bin Jundub, waktu paling utama (afdhal) pelaksanaan akikah adalah pada hari ketujuh setelah kelahiran anak."],
+                [22, "Qw==", "Karena hukumnya sunah muakkadah bagi yang mampu, keluarga yang belum mampu tidak boleh memaksakan diri berutang dan dapat melaksanakannya ketika sudah dilapangkan rezekinya."],
+                [23, "QQ==", "Kurban dilaksanakan pada hari raya Iduladha & hari Tasyrik (10-13 Zulhijah), sedangkan akikah berkaitan dengan rasa syukur atas kelahiran anak."],
+                [24, "RA==", "Berbeda dengan daging kurban yang dibagikan mentah, daging akikah lebih utama dimasak terlebih dahulu sebelum dibagikan atau dihidangkan untuk memudahkan penerima."],
+                [25, "Qg==", "Ibadah kurban dan akikah menanamkan nilai ketakwaan, keikhlasan, rasa syukur, sifat amanah, serta kepedulian sosial kepada sesama."]
+            ];
+
+            let correctCount = 0;
+            const details = {};
+
+            encodedKeyMap.forEach(([id, b64Key, explanation]) => {
+                const key = atob(b64Key);
+                const studentAns = answersMap[id] || "-";
+                const isCorrect = (studentAns === key);
+                if (isCorrect) correctCount++;
+                details[id] = {
+                    correctKey: key,
+                    studentAnswer: studentAns,
+                    isCorrect: isCorrect,
+                    explanation: explanation
+                };
+            });
+
+            const wrongCount = 25 - correctCount;
+            const finalScore = correctCount * 4;
+            const status = finalScore >= 80 ? "TUNTAS" : "PERLU BELAJAR LAGI";
+
+            return {
+                correctCount,
+                wrongCount,
+                finalScore,
+                status,
+                details
+            };
+        }
+
+        function updateConnectionBadgeUI() {
+            const url = getActiveScriptUrl();
+            const badge = document.getElementById('connectionBadge');
+            const warningBox = document.getElementById('unconfiguredWarning');
+
+            if (url) {
+                badge.className = "text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-100 border border-emerald-300/30 hidden sm:inline-flex items-center gap-1.5";
+                badge.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> Terhubung ke Google Sheets`;
+                warningBox.classList.add('hidden');
+            } else {
+                badge.className = "text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-amber-400/20 text-amber-100 border border-amber-300/30 hidden sm:inline-flex items-center gap-1.5";
+                badge.innerHTML = `<i class="fa-solid fa-gear text-[10px]"></i> URL Sheets Belum Diatur`;
+                warningBox.classList.remove('hidden');
+            }
+        }
+
+        function clearValidationErrors() {
+            document.getElementById('errStudentName').classList.add('hidden');
+            document.getElementById('errStudentClass').classList.add('hidden');
+            document.getElementById('inputStudentName').classList.remove('border-dafi-red', 'ring-2', 'ring-dafi-red/20');
+        }
+
+        function handleStartQuiz(event) {
+            event.preventDefault();
+            clearValidationErrors();
+
+            const nameInput = document.getElementById('inputStudentName');
+            const rawName = nameInput.value.trim();
+            const selectedClassRadio = document.querySelector('input[name="studentClass"]:checked');
+
+            let isValid = true;
+
+            if (!rawName || rawName.length < 3) {
+                document.getElementById('errStudentName').classList.remove('hidden');
+                nameInput.classList.add('border-dafi-red', 'ring-2', 'ring-dafi-red/20');
+                nameInput.focus();
+                isValid = false;
+            }
+
+            if (!selectedClassRadio || !['9A', '9B', '9C'].includes(selectedClassRadio.value)) {
+                document.getElementById('errStudentClass').classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Inisialisasi sesi kuis baru dengan urutan soal diacak
+            quizState = {
+                submissionId: generateSubmissionId(),
+                studentName: rawName,
+                studentClass: selectedClassRadio.value,
+                shuffledQuestions: shuffleArray(QUESTION_BANK),
+                currentIndex: 0,
+                answersByOriginalId: {},
+                isSubmitted: false,
+                isSending: false,
+                syncSuccess: false,
+                submittedAtText: "",
+                evaluationResult: null
+            };
+
+            // Tampilkan identitas siswa di header
+            document.getElementById('headerStudentName').textContent = quizState.studentName;
+            document.getElementById('headerStudentClass').textContent = quizState.studentClass;
+            document.getElementById('activeStudentBadge').classList.remove('hidden');
+            document.getElementById('activeStudentBadge').classList.add('md:flex');
+            document.getElementById('mobileStudentIdentity').textContent = `${quizState.studentName} (${quizState.studentClass})`;
+
+            // Beralih tampilan dari Start ke Quiz
+            document.getElementById('viewStart').classList.add('hidden');
+            document.getElementById('viewResult').classList.add('hidden');
+            document.getElementById('viewQuiz').classList.remove('hidden');
+
+            renderQuestionGridNav();
+            renderCurrentQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderCurrentQuestion() {
+            const total = quizState.shuffledQuestions.length;
+            const currentQ = quizState.shuffledQuestions[quizState.currentIndex];
+            const displayNum = quizState.currentIndex + 1;
+            const selectedOption = quizState.answersByOriginalId[currentQ.id] || null;
+            const answeredCount = Object.keys(quizState.answersByOriginalId).length;
+
+            // Update Progress Bar & Indikator
+            document.getElementById('quizProgressBadge').textContent = `Soal ${displayNum} dari ${total}`;
+            document.getElementById('answeredCountBadge').textContent = `Terjawab: ${answeredCount}/${total}`;
+            const progressPercent = Math.round((answeredCount / total) * 100);
+            document.getElementById('quizProgressBar').style.width = `${Math.max(4, progressPercent)}%`;
+
+            // Update Header Nomor Soal
+            document.getElementById('currentDisplayNumber').textContent = displayNum;
+            const statusPill = document.getElementById('questionAnsweredStatus');
+            if (selectedOption) {
+                statusPill.textContent = `Terjawab (${selectedOption})`;
+                statusPill.className = "text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700";
+            } else {
+                statusPill.textContent = "Belum Dijawab";
+                statusPill.className = "text-xs font-bold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500";
+            }
+
+            // Update Redaksi Soal
+            document.getElementById('questionText').textContent = currentQ.question;
+
+            // Render Opsi A, B, C, D
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            ['A', 'B', 'C', 'D'].forEach(letter => {
+                const isSelected = selectedOption === letter;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `option-card w-full text-left p-4 rounded-xl border-2 flex items-start gap-3.5 cursor-pointer ${
+                    isSelected
+                        ? 'selected border-dafi-red bg-dafi-lightred'
+                        : 'border-gray-200 bg-white'
+                }`;
+                btn.onclick = () => selectAnswer(currentQ.id, letter);
+
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-lg font-extrabold text-sm flex items-center justify-center shrink-0 transition ${
+                        isSelected
+                            ? 'bg-dafi-red text-white shadow-xs'
+                            : 'bg-gray-100 text-gray-700 border border-gray-300'
+                    }">
+                        ${letter}
+                    </span>
+                    <span class="text-sm sm:text-base font-medium leading-relaxed pt-0.5 ${
+                        isSelected ? 'text-gray-900 font-bold' : 'text-gray-700'
+                    }">
+                        ${currentQ.options[letter]}
+                    </span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Atur tombol Sebelumnya & Selanjutnya
+            document.getElementById('btnPrevQuestion').disabled = (quizState.currentIndex === 0);
+            const btnNext = document.getElementById('btnNextQuestion');
+            if (quizState.currentIndex === total - 1) {
+                btnNext.innerHTML = `<span>Ke Soal Pertama</span> <i class="fa-solid fa-rotate-left text-xs"></i>`;
+            } else {
+                btnNext.innerHTML = `<span>Selanjutnya</span> <i class="fa-solid fa-chevron-right text-xs"></i>`;
+            }
+
+            updateQuestionGridHighlight();
+        }
+
+        function renderQuestionGridNav() {
+            const grid = document.getElementById('questionGridNav');
+            grid.innerHTML = '';
+
+            quizState.shuffledQuestions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `navDot-${idx}`;
+                btn.onclick = () => jumpToQuestion(idx);
+                btn.textContent = idx + 1;
+                grid.appendChild(btn);
+            });
+
+            updateQuestionGridHighlight();
+        }
+
+        function updateQuestionGridHighlight() {
+            const total = quizState.shuffledQuestions.length;
+            const answeredCount = Object.keys(quizState.answersByOriginalId).length;
+            const remaining = total - answeredCount;
+
+            const counterEl = document.getElementById('unansweredCounterText');
+            if (remaining === 0) {
+                counterEl.textContent = "Semua 25 soal terjawab!";
+                counterEl.className = "text-xs font-bold text-emerald-600";
+                document.getElementById('incompleteNotice').classList.add('hidden');
+            } else {
+                counterEl.textContent = `${remaining} belum dijawab`;
+                counterEl.className = "text-xs font-semibold text-dafi-red";
+            }
+
+            quizState.shuffledQuestions.forEach((q, idx) => {
+                const btn = document.getElementById(`navDot-${idx}`);
+                if (!btn) return;
+                const isAnswered = Boolean(quizState.answersByOriginalId[q.id]);
+                const isCurrent = (idx === quizState.currentIndex);
+
+                let baseClasses = "nav-dot h-10 rounded-xl font-bold text-xs flex items-center justify-center cursor-pointer ";
+                if (isAnswered) {
+                    baseClasses += "bg-dafi-red text-white shadow-xs ";
+                } else {
+                    baseClasses += "bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 ";
+                }
+
+                if (isCurrent) {
+                    baseClasses += "ring-2 ring-offset-2 ring-gray-900 font-extrabold ";
+                }
+
+                btn.className = baseClasses;
+            });
+        }
+
+        function selectAnswer(originalQuestionId, optionLetter) {
+            if (quizState.isSubmitted) return;
+            quizState.answersByOriginalId[originalQuestionId] = optionLetter;
+            renderCurrentQuestion();
+        }
+
+        function navigateQuestion(direction) {
+            const total = quizState.shuffledQuestions.length;
+            let nextIdx = quizState.currentIndex + direction;
+            if (nextIdx >= total) nextIdx = 0;
+            if (nextIdx < 0) nextIdx = 0;
+            quizState.currentIndex = nextIdx;
+            renderCurrentQuestion();
+        }
+
+        function jumpToQuestion(index) {
+            quizState.currentIndex = index;
+            renderCurrentQuestion();
+        }
+
+        function handleRequestSubmit() {
+            if (quizState.isSubmitted) return;
+
+            // Cari apakah masih ada soal yang belum dijawab
+            const unansweredIndices = [];
+            quizState.shuffledQuestions.forEach((q, idx) => {
+                if (!quizState.answersByOriginalId[q.id]) {
+                    unansweredIndices.push(idx);
+                }
+            });
+
+            if (unansweredIndices.length > 0) {
+                const firstUnansweredIdx = unansweredIndices[0];
+                const displayNums = unansweredIndices.map(i => i + 1).join(', ');
+                const noticeBox = document.getElementById('incompleteNotice');
+                const noticeText = document.getElementById('incompleteNoticeText');
+
+                noticeText.textContent = `Wajib menjawab semua soal! Masih ada ${unansweredIndices.length} soal belum dijawab (Nomor: ${displayNums}).`;
+                noticeBox.classList.remove('hidden');
+
+                // Arahkan siswa langsung ke soal pertama yang belum dijawab
+                jumpToQuestion(firstUnansweredIdx);
+                return;
+            }
+
+            // Semua 25 soal sudah dijawab -> Tampilkan Modal Konfirmasi
+            document.getElementById('confirmModalName').textContent = quizState.studentName;
+            document.getElementById('confirmModalClass').textContent = quizState.studentClass;
+            const modal = document.getElementById('modalConfirmSubmit');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('modalConfirmSubmit');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function executeFinalSubmit() {
+            if (quizState.isSubmitted) return;
+            closeConfirmModal();
+
+            // Kunci sesi kuis agar tidak dapat diubah lagi
+            quizState.isSubmitted = true;
+            const now = new Date();
+            quizState.submittedAtText = now.toLocaleString('id-ID', {
+                dateStyle: 'full',
+                timeStyle: 'medium'
+            });
+
+            // Hitung nilai sesungguhnya dari 25 jawaban siswa
+            quizState.evaluationResult = evaluateSubmittedQuizLocally(quizState.answersByOriginalId);
+
+            // Tampilkan Halaman Hasil & Pembahasan
+            document.getElementById('viewQuiz').classList.add('hidden');
+            document.getElementById('viewResult').classList.remove('hidden');
+
+            renderResultSummary();
+            renderDetailedReview('ALL');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Kirim data ke Google Sheets
+            submitQuizToGoogleSheets();
+        }
+
+        function buildSubmissionPayload() {
+            // Susun jawaban berurutan dari Soal 1 s.d. Soal 25 sesuai urutan Bank Soal Asli
+            const orderedAnswers = {};
+            for (let i = 1; i <= 25; i++) {
+                orderedAnswers[`q${i}`] = quizState.answersByOriginalId[i] || "";
+            }
+
+            return {
+                submissionId: quizState.submissionId,
+                studentName: quizState.studentName,
+                studentClass: quizState.studentClass,
+                totalQuestions: 25,
+                clientCorrectCount: quizState.evaluationResult.correctCount,
+                clientWrongCount: quizState.evaluationResult.wrongCount,
+                clientScore: quizState.evaluationResult.finalScore,
+                clientStatus: quizState.evaluationResult.status,
+                answers: orderedAnswers
+            };
+        }
+
+        async function submitQuizToGoogleSheets() {
+            // Cegah klik/pengiriman ganda ketika pengiriman sedang berlangsung atau sudah berhasil
+            if (quizState.isSending || quizState.syncSuccess) return;
+
+            const scriptUrl = getActiveScriptUrl();
+            const banner = document.getElementById('syncStatusBanner');
+
+            if (!scriptUrl) {
+                banner.className = "rounded-2xl p-4 sm:p-5 border bg-amber-50 border-amber-300 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4";
+                banner.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl mt-0.5"></i>
+                        <div>
+                            <h4 class="font-extrabold text-sm sm:text-base">URL Google Sheets Belum Dikonfigurasi</h4>
+                            <p class="text-xs sm:text-sm text-amber-800 mt-0.5">
+                                Nilai Anda telah dihitung dengan akurat, namun belum terkirim ke Google Sheets karena URL Web App Guru belum dimasukkan. Pasang URL di menu <strong>Konfigurasi Sheets</strong> lalu klik tombol kirim ulang di samping.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" onclick="openConfigModal()" class="px-3.5 py-2 rounded-xl bg-white border border-amber-400 text-amber-900 font-bold text-xs hover:bg-amber-100 transition cursor-pointer">
+                            Atur URL
+                        </button>
+                        <button type="button" onclick="submitQuizToGoogleSheets()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-rotate-right"></i> Kirim Ulang
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            quizState.isSending = true;
+            banner.className = "rounded-2xl p-4 sm:p-5 border bg-blue-50 border-blue-200 text-blue-900 flex items-center justify-between gap-4";
+            banner.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-circle-notch fa-spin text-blue-600 text-xl"></i>
+                    <div>
+                        <h4 class="font-extrabold text-sm sm:text-base">Sedang Menyimpan Nilai ke Google Sheets Guru...</h4>
+                        <p class="text-xs text-blue-700 mt-0.5">Mohon tunggu sebentar, jangan tutup halaman ini. ID Pengiriman: <code class="font-mono">${quizState.submissionId}</code></p>
+                    </div>
+                </div>
+            `;
+
+            const payload = buildSubmissionPayload();
+
+            try {
+                // Menggunakan Content-Type text/plain;charset=utf-8 agar tidak memicu blokir CORS preflight pada Google Apps Script
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: JSON.stringify(payload),
+                    redirect: 'follow'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result && result.status === 'success') {
+                    quizState.syncSuccess = true;
+                    quizState.isSending = false;
+
+                    // Jika server mengembalikan timestamp resmi & hasil validasi server, sinkronkan tampilan
+                    if (result.data && result.data.timestamp) {
+                        document.getElementById('resultTimestamp').textContent = result.data.timestamp;
+                    }
+
+                    banner.className = "rounded-2xl p-4 sm:p-5 border bg-emerald-50 border-emerald-300 text-emerald-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3";
+                    banner.innerHTML = `
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-extrabold text-sm sm:text-base">Alhamdulillah! Hasil Kuis Berhasil Tersimpan di Google Sheets Guru</h4>
+                                <p class="text-xs text-emerald-800 mt-0.5">
+                                    Server Google Sheets telah memvalidasi dan menyimpan jawaban Anda pada sheet <strong>Hasil Kuis</strong> (Baris ke-${result.data?.rowNumber || '-'}).
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono bg-emerald-100 text-emerald-800 px-3 py-1 rounded-lg border border-emerald-200 shrink-0">
+                            Terkonfirmasi Server
+                        </span>
+                    `;
+                } else {
+                    throw new Error(result?.message || "Respons server tidak valid.");
+                }
+            } catch (error) {
+                quizState.isSending = false;
+                banner.className = "rounded-2xl p-4 sm:p-5 border bg-red-50 border-red-300 text-red-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4";
+                banner.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-dafi-red text-white flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-sm sm:text-base">Gagal Mengirim Data ke Google Sheets</h4>
+                            <p class="text-xs text-red-800 mt-0.5">
+                                Penyebab: ${error.message || 'Gangguan koneksi internet atau URL Apps Script belum tepat'}. Nilai Anda tetap aman di halaman ini. Silakan periksa koneksi lalu klik tombol <strong>Coba Kirim Lagi</strong>.
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onclick="submitQuizToGoogleSheets()"
+                        class="px-4 py-2.5 rounded-xl dafi-gradient text-white font-extrabold text-xs shadow-sm transition flex items-center gap-2 shrink-0 cursor-pointer"
+                    >
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Coba Kirim Lagi</span>
+                    </button>
+                `;
+            }
+        }
+
+        function renderResultSummary() {
+            const evalData = quizState.evaluationResult;
+            const isPassed = evalData.finalScore >= 80;
+
+            document.getElementById('resultStudentName').textContent = quizState.studentName;
+            document.getElementById('resultStudentClass').textContent = quizState.studentClass;
+            document.getElementById('resultTimestamp').textContent = quizState.submittedAtText;
+            document.getElementById('resultFinalScore').textContent = evalData.finalScore;
+
+            document.getElementById('resultCorrectCount').textContent = `${evalData.correctCount} dari 25`;
+            document.getElementById('resultWrongCount').textContent = `${evalData.wrongCount} Soal`;
+
+            const passBadge = document.getElementById('resultPassBadge');
+            const statusText = document.getElementById('resultStatusText');
+            const feedbackIcon = document.getElementById('resultFeedbackIcon');
+            const feedbackTitle = document.getElementById('resultFeedbackTitle');
+            const feedbackDesc = document.getElementById('resultFeedbackDesc');
+
+            if (isPassed) {
+                passBadge.textContent = "TUNTAS";
+                passBadge.className = "text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300";
+                statusText.textContent = "TUNTAS";
+                statusText.className = "text-sm sm:text-base font-extrabold mt-1.5 block text-emerald-600";
+
+                feedbackIcon.className = "w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 text-lg";
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-award"></i>`;
+                feedbackTitle.textContent = "Barakallahu Fiik! Kamu Telah Mencapai Ketuntasan.";
+                feedbackDesc.textContent = "Pemahamanmu mengenai fikih penyembelihan hewan, kurban, dan akikah sudah sangat baik. Pertahankan semangat belajar dan amalkan ilmunya!";
+            } else {
+                passBadge.textContent = "PERLU BELAJAR LAGI";
+                passBadge.className = "text-xs font-extrabold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300";
+                statusText.textContent = "PERLU BELAJAR LAGI";
+                statusText.className = "text-sm sm:text-base font-extrabold mt-1.5 block text-amber-600";
+
+                feedbackIcon.className = "w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 text-lg";
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-book-open-reader"></i>`;
+                feedbackTitle.textContent = "Jangan Menyerah! Mari Pelajari Kembali Pembahasan di Bawah.";
+                feedbackDesc.textContent = "Nilai ketuntasan minimal adalah 80. Bacalah pembahasan setiap soal yang masih keliru agar pemahaman fikih kurban dan akikahmu semakin mantap.";
+            }
+        }
+
+        function filterReview(mode) {
+            const btnAll = document.getElementById('btnFilterAll');
+            const btnWrong = document.getElementById('btnFilterWrong');
+
+            if (mode === 'ALL') {
+                btnAll.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-white transition";
+                btnWrong.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition";
+            } else {
+                btnWrong.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-dafi-red text-white transition";
+                btnAll.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition";
+            }
+            renderDetailedReview(mode);
+        }
+
+        function renderDetailedReview(filterMode) {
+            const container = document.getElementById('reviewContainer');
+            container.innerHTML = '';
+
+            const evalDetails = quizState.evaluationResult.details;
+
+            // Tampilkan berurutan berdasarkan nomor soal asli 1 s.d. 25
+            const itemsToRender = QUESTION_BANK.filter(q => {
+                if (filterMode === 'WRONG') {
+                    return !evalDetails[q.id].isCorrect;
+                }
+                return true;
+            });
+
+            if (itemsToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-800">
+                        <i class="fa-solid fa-circle-check text-3xl text-emerald-600 mb-2"></i>
+                        <p class="font-extrabold text-base">Masyaallah, Sempurna! Tidak Ada Jawaban yang Salah.</p>
+                        <p class="text-xs mt-1">Seluruh 25 soal berhasil kamu jawab dengan tepat.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            itemsToRender.forEach(q => {
+                const info = evalDetails[q.id];
+                const isCorrect = info.isCorrect;
+
+                const card = document.createElement('div');
+                card.className = `rounded-2xl border p-5 transition ${
+                    isCorrect ? 'bg-white border-gray-200' : 'bg-red-50/40 border-red-200'
+                }`;
+
+                let optionsHtml = '';
+                ['A', 'B', 'C', 'D'].forEach(letter => {
+                    const isKey = (info.correctKey === letter);
+                    const isStudentChoice = (info.studentAnswer === letter);
+
+                    let optStyle = "border-gray-200 bg-gray-50 text-gray-600";
+                    let badgeHtml = "";
+
+                    if (isKey) {
+                        optStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 font-bold";
+                        badgeHtml = `<span class="ml-auto text-[11px] font-extrabold bg-emerald-600 text-white px-2 py-0.5 rounded">Kunci Jawaban</span>`;
+                    } else if (isStudentChoice && !isKey) {
+                        optStyle = "border-red-400 bg-red-100/70 text-red-900 font-semibold";
+                        badgeHtml = `<span class="ml-auto text-[11px] font-extrabold bg-dafi-red text-white px-2 py-0.5 rounded">Jawabanmu</span>`;
+                    }
+
+                    optionsHtml += `
+                        <div class="p-3 rounded-xl border text-xs sm:text-sm flex items-center gap-2.5 ${optStyle}">
+                            <span class="w-6 h-6 rounded-md font-bold flex items-center justify-center shrink-0 ${
+                                isKey ? 'bg-emerald-600 text-white' : (isStudentChoice ? 'bg-dafi-red text-white' : 'bg-white border border-gray-300 text-gray-700')
+                            }">${letter}</span>
+                            <span>${q.options[letter]}</span>
+                            ${badgeHtml}
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-gray-800 text-white">
+                            Soal #${q.id}
+                        </span>
+                        <span class="text-xs font-extrabold px-3 py-1 rounded-full flex items-center gap-1.5 ${
+                            isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-dafi-red'
+                        }">
+                            <i class="fa-solid ${isCorrect ? 'fa-check' : 'fa-xmark'}"></i>
+                            ${isCorrect ? 'Benar (+4 Poin)' : `Salah (Jawabanmu: ${info.studentAnswer}, Kunci: ${info.correctKey})`}
+                        </span>
+                    </div>
+
+                    <p class="font-bold text-gray-900 text-sm sm:text-base mb-3.5 leading-relaxed">
+                        ${q.question}
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                        ${optionsHtml}
+                    </div>
+
+                    <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs sm:text-sm text-blue-950">
+                        <span class="font-extrabold text-blue-800 block mb-0.5">
+                            <i class="fa-solid fa-lightbulb mr-1 text-amber-500"></i> Pembahasan Fikih:
+                        </span>
+                        ${info.explanation}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function openConfigModal() {
+            const modal = document.getElementById('modalConfig');
+            const input = document.getElementById('inputScriptUrl');
+            input.value = getActiveScriptUrl();
+            document.getElementById('configSavedNotice').classList.add('hidden');
+            document.getElementById('testConnectionResult').classList.add('hidden');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfigModal() {
+            const modal = document.getElementById('modalConfig');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveScriptUrlConfig() {
+            const input = document.getElementById('inputScriptUrl');
+            const url = input.value.trim();
+            try {
+                if (url) {
+                    localStorage.setItem('DAFI_PAI_SCRIPT_URL', url);
+                } else {
+                    localStorage.removeItem('DAFI_PAI_SCRIPT_URL');
+                }
+            } catch (e) {
+                // Ignore storage errors
+            }
+            updateConnectionBadgeUI();
+            const notice = document.getElementById('configSavedNotice');
+            notice.classList.remove('hidden');
+
+            // Jika sedang berada di halaman hasil dan sebelumnya belum terkirim, otomatis coba kirim
+            if (quizState.isSubmitted && !quizState.syncSuccess && url) {
+                submitQuizToGoogleSheets();
+            }
+        }
+
+        async function sendSampleTestToSheets() {
+            const input = document.getElementById('inputScriptUrl');
+            const url = input.value.trim();
+            const resultBox = document.getElementById('testConnectionResult');
+            const btnTest = document.getElementById('btnTestConnection');
+
+            if (!url || !url.startsWith('https://script.google.com/')) {
+                resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-red-50 border border-red-200 text-dafi-red";
+                resultBox.textContent = "Masukkan URL Web App Google Apps Script yang valid (diawali https://script.google.com/.../exec) terlebih dahulu.";
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            // Simpan terlebih dahulu
+            saveScriptUrlConfig();
+
+            btnTest.disabled = true;
+            btnTest.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Mengirim Uji Coba...`;
+            resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-800";
+            resultBox.textContent = "Sedang mengirim 1 baris data santri contoh ke Google Sheets...";
+            resultBox.classList.remove('hidden');
+
+            // Buat data uji coba dengan jawaban contoh (23 benar, 2 salah -> Nilai 92 TUNTAS)
+            const sampleAnswers = {
+                q1: "B", q2: "C", q3: "A", q4: "D", q5: "B",
+                q6: "C", q7: "A", q8: "D", q9: "B", q10: "C",
+                q11: "A", q12: "D", q13: "B", q14: "C", q15: "A",
+                q16: "D", q17: "B", q18: "C", q19: "A", q20: "D",
+                q21: "B", q22: "C", q23: "A", q24: "A", q25: "A"
+            };
+
+            const testPayload = {
+                submissionId: "TEST-" + Date.now(),
+                studentName: "SANTRI CONTOH (UJI COBA GURU)",
+                studentClass: "9A",
+                totalQuestions: 25,
+                answers: sampleAnswers
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(testPayload),
+                    redirect: 'follow'
+                });
+
+                const resJson = await response.json();
+                if (resJson && resJson.status === 'success') {
+                    resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-emerald-50 border border-emerald-300 text-emerald-900";
+                    resultBox.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> <strong>Berhasil!</strong> Data contoh (Nilai: ${resJson.data.score}, Status: ${resJson.data.status}) telah masuk ke sheet <strong>Hasil Kuis</strong> baris ke-${resJson.data.rowNumber}. Silakan periksa Google Sheets Anda!`;
+                } else {
+                    throw new Error(resJson?.message || "Gagal memproses di server.");
+                }
+            } catch (err) {
+                resultBox.className = "mt-3 p-3 rounded-xl text-xs font-semibold bg-red-50 border border-red-200 text-dafi-red";
+                resultBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> <strong>Gagal Terhubung:</strong> ${err.message}. Pastikan Deployment diatur ke <em>Who has access: Anyone</em>.`;
+            } finally {
+                btnTest.disabled = false;
+                btnTest.innerHTML = `<i class="fa-solid fa-vial text-dafi-red"></i> <span>Kirim Data Uji Coba</span>`;
+            }
+        }
+
+        // Inisialisasi saat halaman dimuat
+        window.onload = function () {
+            updateConnectionBadgeUI();
+        };
+    </script>
+</body>
+</html>
